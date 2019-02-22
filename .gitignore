@@ -36,3 +36,6 @@ inc/
 
 # editors and IDEs
 .idea
+
+# Dependency
+/vendor
