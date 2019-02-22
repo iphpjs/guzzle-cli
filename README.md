@@ -1,7 +1,7 @@
 # guzzle-cli
-发送原始HTTP请求命令行工具
+guzzle-cli是一个发送原始HTTP请求的命令行工具
 
-## 用法
+## 基本用法
 
 ```bash
 guzzle-cli -r 1.http
