@@ -38,21 +38,25 @@ class Cli
     {
         $line        = $lines[0];
         $headerLines = array_slice($lines, 1, -2);
+        $body = array_pop($lines);
 
-        $headers     = [];
+        $headers = [];
         foreach ($headerLines as $item) {
             list($key, $value) = explode(':', $item, 2);
             $headers[$key] = trim($value);
         }
-
         list($method, $path, $version) = explode(' ', $line, 3);
-        $host = $headers['Host'];
-        $uri  = sprintf('http://%s%s', $host, $path);
+        preg_match('/HTTP\/(\d\.\d)/', $version, $matches);
+        $version = $matches[1];
+        $host    = $headers['Host'];
+        $uri     = sprintf('http://%s%s', $host, $path);
 
         return [
             $method,
             $uri,
             $headers,
+            $body,
+            $version,
         ];
     }
 
@@ -62,10 +66,9 @@ class Cli
     public function send()
     {
         $lines = $this->read();
-        list($method, $uri, $headers) = $this->parseRawHttp($lines);
 
         $guzzle  = new Guzzle();
-        $request = new Request($method, $uri, $headers);
+        $request = new Request(...$this->parseRawHttp($lines));
         try {
             $response = $guzzle->send($request);
         } catch (RequestException $exception) {

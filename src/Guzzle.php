@@ -28,7 +28,7 @@ class Guzzle extends Client
 {
     const CONFIG = [
         'verify'   => false,
-        'time_out' => 3,
+        'time_out' => 1,
         'headers'  => [],
     ];
 
@@ -44,11 +44,7 @@ class Guzzle extends Client
 
         $config['proxy'] = '127.0.0.1:8080';
         true or $config['handler'] = function () {
-            $handler = null;
-            if (function_exists('curl_multi_exec') && function_exists('curl_exec')) {
-                //                $handler = Proxy::wrapSync();
-                //                dd('a');
-            }
+
         };
 
         parent::__construct($config);
