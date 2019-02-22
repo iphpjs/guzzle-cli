@@ -11,7 +11,7 @@
 
 use GuzzleCli\Cli;
 
-define('ROOT_PATH', dirname(__DIR__));
+define('ROOT_PATH', __DIR__);
 define('EXEC_PATH', getcwd());
 require ROOT_PATH . '/vendor/autoload.php';
 
