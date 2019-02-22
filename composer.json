@@ -1,5 +1,5 @@
 {
-    "name": "NetworkRanger/guzzle-cli",
+    "name": "iphpjs/guzzle-cli",
     "type": "tool",
     "description": "发送原始HTTP请求命令行工具",
     "keywords": [
