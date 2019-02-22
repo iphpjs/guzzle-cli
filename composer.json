@@ -6,6 +6,12 @@
         "HTTP请求命令行工具"
     ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "NetworkRanger",
+            "email": "17346503142@163.com"
+        }
+    ],
     "require": {
         "php": "^7.1.3",
         "ext-json": "*",
@@ -18,5 +24,8 @@
         "psr-4": {
             "GuzzleCli\\": "src/"
         }
-    }
+    },
+    "bin": [
+        "guzzle-cli"
+    ]
 }

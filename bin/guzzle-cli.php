@@ -1,10 +1,12 @@
 #!/usr/bin/env php
 <?php
-/**
- * Created by PhpStorm.
- * User: suse
- * Date: 2019-02-22
- * Time: 10:58
+/*
+ * This file is part of guzzle-cli
+ *
+ * (c) NetworkRanger <17346503142@163.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 use GuzzleCli\Cli;
