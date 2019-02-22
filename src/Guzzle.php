@@ -42,7 +42,7 @@ class Guzzle extends Client
     {
         $config = self::CONFIG;
 
-        $config['proxy'] = '127.0.0.1:8080';
+        false or $config['proxy'] = '127.0.0.1:8080';
         true or $config['handler'] = function () {
 
         };
