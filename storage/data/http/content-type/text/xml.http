@@ -1,0 +1,21 @@
+POST /post HTTP/1.1
+Host: httpbin.org
+Content-Type: text/xml
+accept: application/json
+Origin: http://httpbin.org
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36
+Referer: http://httpbin.org/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+Content-Length: 207
+
+<?xml version="1.0"?>
+<methodCall>
+    <methodName>examples.getStateName</methodName>
+    <params>
+        <param>
+            <value><i4>41</i4></value>
+        </param>
+    </params>
+</methodCall>

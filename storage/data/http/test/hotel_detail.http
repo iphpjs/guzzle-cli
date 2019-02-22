@@ -1,0 +1,10 @@
+GET /mobile_api/tujia/hotel/detail HTTP/1.1
+Host: i.test.xiaogechuangxin.com
+Cookie: hostex_session=DQIHPHyBMtDKKZUDMM9POsVpsI338E7L7bhLf05s; login=1; account_count=eyJpdiI6InR4T3d6T1c4Vko1bnZVUFRMUXdYdXc9PSIsInZhbHVlIjoiUmROcVhCRXB1eFIxZFd5S1hOdVhCQT09IiwibWFjIjoiYmNiNzk0ZTY2NDBjZTA5MjIwNDI4NmYxMzkwZWU1ODk1NGM1N2UzN2UwMGI0NGUzN2Q4NDFhOWVkYWY0MWIyZSJ9; operator_id=10168; register_type=1; user=13120482368
+Hostex-App-Version: 2.1.0
+Connection: close
+Accept: application/json, text/plain, */*
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16C101
+Referer: http://i.test.xiaogechuangxin.com/h5/hostex-h5/
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate
