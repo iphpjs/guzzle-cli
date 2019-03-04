@@ -21,9 +21,11 @@ $options = getopt("r::", [
     'read',
 ]);
 
-if (isset($options['r'])) {
-    $filename       = $options['r'];
-    $file_full_path = sprintf('%s/%s', EXEC_PATH, $filename);
+$command = join(' ', $_SERVER['argv']);
+preg_match('/-r\s*([^\s]*)/', $command, $matches);
+
+if (!empty($matches)) {
+    $file_full_path = sprintf('%s/%s', EXEC_PATH, $matches[1]);
     (new Cli($file_full_path))->send();
 } else {
     GuzzleCli\print_guzzle_cli_usage();

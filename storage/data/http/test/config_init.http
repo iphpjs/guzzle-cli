@@ -1,0 +1,11 @@
+GET /mobile_api/config/init HTTP/1.1
+Host: i.test.xiaogechuangxin.com
+Cookie: hostex_session=DQIHPHyBMtDKKZUDMM9POsVpsI338E7L7bhLf05s; login=1; operator_id=10223; register_type=1; thirdparty_account_count=0; user=13120482368; captcha=capt5c7cfd58d974d
+Hostex-App-Version: 2.1.0
+Connection: keep-alive
+Connection: keep-alive
+Accept: application/json, text/plain, */*
+User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 12_1_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16D57
+Referer: http://i.test.xiaogechuangxin.com/h5/hostex-h5/
+Accept-Language: zh-cn
+Accept-Encoding: gzip, deflate

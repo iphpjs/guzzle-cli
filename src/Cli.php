@@ -38,13 +38,14 @@ class Cli
     {
         $line        = $lines[0];
         $headerLines = array_slice($lines, 1, -2);
-        $body = array_pop($lines);
+        $body        = array_pop($lines);
 
         $headers = [];
         foreach ($headerLines as $item) {
             list($key, $value) = explode(':', $item, 2);
             $headers[$key] = trim($value);
         }
+
         list($method, $path, $version) = explode(' ', $line, 3);
         preg_match('/HTTP\/(\d\.\d)/', $version, $matches);
         $version = $matches[1];
