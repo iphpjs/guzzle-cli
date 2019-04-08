@@ -10,5 +10,5 @@ guzzle-cli -r 1.http
 ## 使用代理
 
 ```bash
-guzzle-cli -r 1.http --proxy=127.0.0.1:8080
+guzzle-cli -r 1.http --proxy 127.0.0.1:8080
 ```
