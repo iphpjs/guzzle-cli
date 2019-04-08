@@ -10,7 +10,6 @@ namespace GuzzleCli;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
-use Throwable;
 
 class Cli
 {

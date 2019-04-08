@@ -9,27 +9,11 @@
  * with this source code in the file LICENSE.
  */
 
-use GuzzleCli\Cli;
-use Symfony\Component\Console\Input\ArgvInput;
+use GuzzleCli\Application;
 
 define('ROOT_PATH', __DIR__);
-define('EXEC_PATH', getcwd());
 require ROOT_PATH . '/vendor/autoload.php';
 
-$argvInput = new ArgvInput();
-
-if ($argvInput->hasParameterOption('-r')) {
-    $file_full_path = $argvInput->getParameterOption('-r');
-    try {
-        $config = [];
-        if ($argvInput->hasParameterOption('--proxy')) {
-            $config['proxy'] = $argvInput->getParameterOption('--proxy');
-        }
-
-        (new Cli($file_full_path))->send($config);
-    } catch (Throwable $throwable) {
-        echo $throwable->getTraceAsString();
-    }
-} else {
-    GuzzleCli\print_guzzle_cli_usage();
-}
+// run the command application
+$application = new Application();
+$application->run();
