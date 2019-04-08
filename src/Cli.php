@@ -88,9 +88,6 @@ class Cli
             $response = $exception->getResponse();
         }
 
-        echo 'request: ' . PHP_EOL;
-        echo $guzzle->getRawRequest() . PHP_EOL;
-        echo 'response: ' . PHP_EOL;
-        echo $guzzle->getRawResponse($response) . PHP_EOL;
+        echo $guzzle->getRawResponse($response);
     }
 }

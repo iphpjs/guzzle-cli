@@ -10,27 +10,20 @@
  */
 
 use GuzzleCli\Cli;
+use Symfony\Component\Console\Input\ArgvInput;
 
 define('ROOT_PATH', __DIR__);
 define('EXEC_PATH', getcwd());
 require ROOT_PATH . '/vendor/autoload.php';
 
-//选项
-$options = getopt("r::", [
-    // 读取http请求文件
-    'read',
-]);
+$argvInput = new ArgvInput();
 
-$command = join(' ', $_SERVER['argv']);
-preg_match('/-r\s*([^\s]*)/', $command, $matches);
-
-if (!empty($matches)) {
-    $file_full_path = sprintf('%s/%s', EXEC_PATH, $matches[1]);
+if ($argvInput->hasParameterOption('-r')) {
+    $file_full_path = $argvInput->getParameterOption('-r');
     try {
-        preg_match('/--proxy\s*([^\s]*)/', $command, $matches);
         $config = [];
-        if (!empty($matches)) {
-            $config['proxy'] = $matches[1];
+        if ($argvInput->hasParameterOption('--proxy')) {
+            $config['proxy'] = $argvInput->getParameterOption('--proxy');
         }
 
         (new Cli($file_full_path))->send($config);
