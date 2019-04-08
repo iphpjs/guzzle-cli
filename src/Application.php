@@ -67,12 +67,13 @@ EOF;
     {
         if ($input->hasParameterOption('-r')) {
             $file_full_path = $input->getParameterOption('-r');
-            $config         = [];
+
+            $guzzle_config         = [];
             if ($input->hasParameterOption('--proxy')) {
-                $config['proxy'] = $input->getParameterOption('--proxy');
+                $guzzle_config['proxy'] = $input->getParameterOption('--proxy');
             }
 
-            (new Cli($file_full_path))->send($config);
+            (new Cli($file_full_path))->send($input, $guzzle_config);
         }elseif ($input->hasParameterOption('-v')) {
             echo self::$logo;
             echo PHP_EOL;

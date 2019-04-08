@@ -10,6 +10,7 @@ namespace GuzzleCli;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
+use Symfony\Component\Console\Input\InputInterface;
 
 class Cli
 {
@@ -47,13 +48,12 @@ class Cli
                 continue;
             }
 
-            if(strpos($item, ':') !== false){
+            if (strpos($item, ':') !== false) {
                 list($key, $value) = explode(':', $item, 2);
                 $headers[$key] = trim($value);
-            }else{
+            } else {
                 $flag = true;
             }
-
 
         }
 
@@ -75,16 +75,21 @@ class Cli
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send($config)
+    public function send(InputInterface $input, $guzzle_config = [])
     {
         $lines = $this->read();
 
-        $guzzle  = new Guzzle($config);
+        $guzzle  = new Guzzle($guzzle_config);
         $request = new Request(...$this->parseRawHttp($lines));
         try {
             $response = $guzzle->send($request);
         } catch (RequestException $exception) {
             $response = $exception->getResponse();
+        }
+
+        if ($input->hasParameterOption('-i')) {
+            echo $guzzle->getRawRequest();
+            echo PHP_EOL;
         }
 
         echo $guzzle->getRawResponse($response);
