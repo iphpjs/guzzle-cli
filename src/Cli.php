@@ -76,11 +76,11 @@ class Cli
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send()
+    public function send($config)
     {
         $lines = $this->read();
 
-        $guzzle  = new Guzzle();
+        $guzzle  = new Guzzle($config);
         $request = new Request(...$this->parseRawHttp($lines));
         try {
             $response = $guzzle->send($request);

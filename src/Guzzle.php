@@ -38,15 +38,9 @@ class Guzzle extends Client
 
     private static $instance;
 
-    public function __construct()
+    public function __construct($_config = [])
     {
-        $config = self::CONFIG;
-
-        false or $config['proxy'] = '127.0.0.1:8080';
-        true or $config['handler'] = function () {
-
-        };
-
+        $config = $_config + self::CONFIG;
         parent::__construct($config);
     }
 

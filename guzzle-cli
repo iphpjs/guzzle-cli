@@ -27,7 +27,13 @@ preg_match('/-r\s*([^\s]*)/', $command, $matches);
 if (!empty($matches)) {
     $file_full_path = sprintf('%s/%s', EXEC_PATH, $matches[1]);
     try {
-        (new Cli($file_full_path))->send();
+        preg_match('/--proxy\s*([^\s]*)/', $command, $matches);
+        $config = [];
+        if (!empty($matches)) {
+            $config['proxy'] = $matches[1];
+        }
+
+        (new Cli($file_full_path))->send($config);
     } catch (Throwable $throwable) {
         echo $throwable->getTraceAsString();
     }
