@@ -12,7 +12,7 @@ function print_guzzle_cli_usage()
 {
     echo <<<'EOF'
 用法:
-    guzzle-cli -r1.http
+    guzzle-cli -r 1.http
 
 EOF;
 }

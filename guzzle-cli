@@ -26,7 +26,11 @@ preg_match('/-r\s*([^\s]*)/', $command, $matches);
 
 if (!empty($matches)) {
     $file_full_path = sprintf('%s/%s', EXEC_PATH, $matches[1]);
-    (new Cli($file_full_path))->send();
+    try {
+        (new Cli($file_full_path))->send();
+    } catch (Throwable $throwable) {
+        echo $throwable->getTraceAsString();
+    }
 } else {
     GuzzleCli\print_guzzle_cli_usage();
 }

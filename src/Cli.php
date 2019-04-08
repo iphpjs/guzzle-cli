@@ -10,6 +10,7 @@ namespace GuzzleCli;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
+use Throwable;
 
 class Cli
 {
@@ -36,14 +37,25 @@ class Cli
 
     public function parseRawHttp($lines)
     {
-        $line        = $lines[0];
-        $headerLines = array_slice($lines, 1, -2);
-        $body        = array_pop($lines);
+        $line       = $lines[0];
+        $left_lines = array_slice($lines, 1);
+        $headers    = [];
+        $body       = '';
+        $flag       = false;
+        foreach ($left_lines as $item) {
+            if ($flag) { // body
+                $body .= $item;
+                continue;
+            }
 
-        $headers = [];
-        foreach ($headerLines as $item) {
-            list($key, $value) = explode(':', $item, 2);
-            $headers[$key] = trim($value);
+            if(strpos($item, ':') !== false){
+                list($key, $value) = explode(':', $item, 2);
+                $headers[$key] = trim($value);
+            }else{
+                $flag = true;
+            }
+
+
         }
 
         list($method, $path, $version) = explode(' ', $line, 3);
@@ -76,7 +88,9 @@ class Cli
             $response = $exception->getResponse();
         }
 
-        var_dump($guzzle->getRawRequest());
-        var_dump($guzzle->getRawResponse($response));
+        echo 'request: ' . PHP_EOL;
+        echo $guzzle->getRawRequest() . PHP_EOL;
+        echo 'response: ' . PHP_EOL;
+        echo $guzzle->getRawResponse($response) . PHP_EOL;
     }
 }
