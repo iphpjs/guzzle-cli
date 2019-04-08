@@ -73,8 +73,7 @@ EOF;
             }
 
             (new Cli($file_full_path))->send($config);
-        }
-        if ($input->hasParameterOption('-v')) {
+        }elseif ($input->hasParameterOption('-v')) {
             echo self::$logo;
             echo PHP_EOL;
             echo 'version: ' . GuzzleCli::getVersion();
