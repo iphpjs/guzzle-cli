@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-$method       = true;
+$method       = false;
 $content_type = false;
 $test         = false;
+$auth         = true;
 
 // method test
 if ($method) {
@@ -50,5 +51,26 @@ if ($test) {
     echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
 
     system('./guzzle-cli -r storage/data/http/test/hotel_detail.http');
+    echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
+}
+
+// auth test
+if($auth){
+    system('./guzzle-cli -r storage/data/http/auth/basic_auth_failed.http');
+    echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
+
+    system('./guzzle-cli -r storage/data/http/auth/basic_auth_success.http');
+    echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
+
+    system('./guzzle-cli -r storage/data/http/auth/bearer.http');
+    echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
+
+    system('./guzzle-cli -r storage/data/http/auth/digest_auth_failed.http');
+    echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
+
+    system('./guzzle-cli -r storage/data/http/auth/digest_auth_success.http');
+    echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
+
+    system('./guzzle-cli -r storage/data/http/auth/digest_auth_md5_success.http');
     echo PHP_EOL . str_repeat('-', 50) . PHP_EOL;
 }

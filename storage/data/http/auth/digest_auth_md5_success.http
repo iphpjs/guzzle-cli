@@ -1,0 +1,11 @@
+GET /digest-auth/qop/admin/password/MD5 HTTP/1.1
+Host: httpbin.org
+Authorization: Digest username="admin", realm="me@kennethreitz.com", nonce="5f2c589f86bc31314f4113de27c0efdf", uri="/digest-auth/qop/admin/password/MD5", algorithm=MD5, response="6292f90ff278d8a5285d72753ab64eda", opaque="80df96a43cc5f058d0eb7250b83b8c81", qop=auth, nc=00000002, cnonce="2c25b02fb63ad4e9"
+accept: application/json
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36
+Referer: http://httpbin.org/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: stale_after=never; fake=fake_value
+Connection: close
+

@@ -10,7 +10,7 @@ namespace GuzzleCli;
 
 class GuzzleCli
 {
-    const SOURCE_VERSION = '0.1-dev+source';
+    const SOURCE_VERSION = '0.5-dev+source';
 
     public static function getVersion()
     {

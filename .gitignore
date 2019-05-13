@@ -40,4 +40,4 @@ inc/
 # Dependency
 /vendor
 
-storage/
+storage/data/http/test
