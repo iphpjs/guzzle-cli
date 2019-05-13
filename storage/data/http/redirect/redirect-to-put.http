@@ -1,0 +1,14 @@
+PUT /redirect-to HTTP/1.1
+Host: httpbin.org
+Content-Length: 44
+accept: text/html
+Origin: http://httpbin.org
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36
+Content-Type: application/x-www-form-urlencoded
+Referer: http://httpbin.org/
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: stale_after=never; fake=fake_value; freeform=iphpjs; iphpjs=suse
+Connection: close
+
+url=https%3A%2F%2Fiphpjs.com&status_code=200
