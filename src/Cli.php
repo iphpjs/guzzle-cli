@@ -35,7 +35,7 @@ class Cli
         return $lines;
     }
 
-    public function parseRawHttp($lines)
+    public function parseRawHttp($lines, InputInterface $input)
     {
         $line       = $lines[0];
         $left_lines = array_slice($lines, 1);
@@ -59,9 +59,10 @@ class Cli
 
         list($method, $path, $version) = explode(' ', $line, 3);
         preg_match('/HTTP\/(\d\.\d)/', $version, $matches);
-        $version = $matches[1];
-        $host    = $headers['Host'];
-        $uri     = sprintf('http://%s%s', $host, $path);
+        $version  = $matches[1];
+        $host     = $headers['Host'];
+        $protocol = $input->hasParameterOption('--secure') ? 'https' : 'http';
+        $uri      = sprintf('%s://%s%s', $protocol, $host, $path);
 
         return [
             $method,
@@ -75,12 +76,17 @@ class Cli
     /**
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function send(InputInterface $input, $guzzle_config = [])
+    public function send(InputInterface $input)
     {
         $lines = $this->read();
 
+        $guzzle_config = [];
+        if ($input->hasParameterOption('--proxy')) {
+            $guzzle_config['proxy'] = $input->getParameterOption('--proxy');
+        }
+
         $guzzle  = new Guzzle($guzzle_config);
-        $request = new Request(...$this->parseRawHttp($lines));
+        $request = new Request(...$this->parseRawHttp($lines, $input));
         try {
             $response = $guzzle->send($request);
         } catch (RequestException $exception) {
@@ -91,7 +97,6 @@ class Cli
             echo $guzzle->getRawRequest();
             echo PHP_EOL;
         }
-
         echo $guzzle->getRawResponse($response);
     }
 }
