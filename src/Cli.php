@@ -10,67 +10,26 @@ namespace GuzzleCli;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use function GuzzleHttp\Psr7\parse_request;
+use function GuzzleHttp\Psr7\str;
 
 class Cli
 {
-    private $file_full_path;
+    private $fileFullPath;
 
-    public function __construct($file_full_path)
+    public function __construct($fileFullPath)
     {
-        $this->file_full_path = $file_full_path;
+        $this->fileFullPath = $fileFullPath;
     }
 
-    public function read()
+    public function readAsString()
     {
-        file_exists($this->file_full_path) or die(sprintf('指定的文件:%s不存在！' . PHP_EOL, $this->file_full_path));
+        file_exists($this->fileFullPath) or die(sprintf('指定的文件:%s不存在！' . PHP_EOL, $this->fileFullPath));
 
-        $lines  = [];
-        $handle = fopen($this->file_full_path, 'r');
-        while (!feof($handle)) {
-            $lines[] = fgets($handle);
-        }
-        fclose($handle);
-
-        return $lines;
-    }
-
-    public function parseRawHttp($lines, InputInterface $input)
-    {
-        $line       = $lines[0];
-        $left_lines = array_slice($lines, 1);
-        $headers    = [];
-        $body       = '';
-        $flag       = false;
-        foreach ($left_lines as $item) {
-            if ($flag) { // body
-                $body .= $item;
-                continue;
-            }
-
-            if (strpos($item, ':') !== false) {
-                list($key, $value) = explode(':', $item, 2);
-                $headers[$key] = trim($value);
-            } else {
-                $flag = true;
-            }
-
-        }
-
-        list($method, $path, $version) = explode(' ', $line, 3);
-        preg_match('/HTTP\/(\d\.\d)/', $version, $matches);
-        $version  = $matches[1];
-        $host     = $headers['Host'];
-        $protocol = $input->hasParameterOption('--secure') ? 'https' : 'http';
-        $uri      = sprintf('%s://%s%s', $protocol, $host, $path);
-
-        return [
-            $method,
-            $uri,
-            $headers,
-            $body,
-            $version,
-        ];
+        return file_get_contents($this->fileFullPath);
     }
 
     /**
@@ -78,25 +37,18 @@ class Cli
      */
     public function send(InputInterface $input)
     {
-        $lines = $this->read();
 
-        $guzzle_config = [];
         if ($input->hasParameterOption('--proxy')) {
-            $guzzle_config['proxy'] = $input->getParameterOption('--proxy');
+            $config['proxy'] = $input->getParameterOption('--proxy');
         }
 
-        $guzzle  = new Guzzle($guzzle_config);
-        $request = new Request(...$this->parseRawHttp($lines, $input));
-        try {
-            $response = $guzzle->send($request);
-        } catch (RequestException $exception) {
-            $response = $exception->getResponse();
-        }
+        $guzzle = Guzzle::instance($config);
+        $guzzle->send(parse_request($this->readAsString()));
 
         if ($input->hasParameterOption('-i')) {
             echo $guzzle->getRawRequest();
             echo PHP_EOL;
         }
-        echo $guzzle->getRawResponse($response);
+        echo $guzzle->getRawRequest();
     }
 }

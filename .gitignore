@@ -37,6 +37,10 @@ inc/
 # editors and IDEs
 .idea
 
+# system
+**/*/.DS_Store
+
+
 # Dependency
 /vendor
 

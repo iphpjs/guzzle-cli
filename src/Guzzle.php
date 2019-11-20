@@ -14,6 +14,8 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\UriInterface;
+use function GuzzleHttp\Psr7\str;
 
 /**
  * Class Guzzle
@@ -24,123 +26,53 @@ use Psr\Http\Message\ResponseInterface;
  * @author suse 17246503142@163.com
  * @package App\Util
  */
-class Guzzle extends Client
+class Guzzle
 {
     const CONFIG = [
-        'verify'   => false,
-        'time_out' => 1,
-        'headers'  => [],
+        'verify'      => false,
+        'http_errors' => false,
+        'time_out'    => 1,
     ];
 
-    private $options = [];
+    private $rawRequest;
 
-    private $request;
+    private $rawResponse;
 
     private static $instance;
 
-    public function __construct($_config = [])
+    private function __construct($config)
     {
-        $config = $_config + self::CONFIG;
-        parent::__construct($config);
+        return new Client($config + self::CONFIG);
     }
 
     private function clone()
     {
     }
 
-    public static function getInstance()
+    public static function instance($config)
     {
-        self::$instance instanceof self or self::$instance = new self;
+        self::$instance instanceof self or self::$instance = new self($config);
 
         return self::$instance;
     }
 
     public function send(RequestInterface $request, array $options = [])
     {
-        $this->request = $request;
-        $this->options = $options;
-
-        return parent::send($request, $options);
-    }
-
-    public function __call($method, $args)
-    {
-        $uri           = $args[0];
-        $this->request = new Request($method, $uri);
-        $this->options = $args[1] ?? [];
-
-        return parent::__call($method, $args);
+        return $this->send($request, $options + [
+                'on_stats' => function (RequestInterface $request, RequestInterface $response, UriInterface $uri) {
+                    $this->rawRequest  = str($request);
+                    $this->rawResponse = str($response);
+                },
+            ]);
     }
 
     public function getRawRequest(): string
     {
-        $request = $this->request or die('未发送请求，无法获取原始请求');
-        assert($request instanceof RequestInterface);
-
-        $method  = $request->getMethod();
-        $target  = $request->getRequestTarget();
-        $version = $request->getProtocolVersion();
-        $line    = sprintf('%s %s HTTP/%s', $method, $target, $version);
-
-        $userAgentFlag = true;
-        foreach (self::CONFIG['headers'] as $key => $value) {
-            $request = $request->withHeader($key, $value);
-            // Add the User-Agent header if one was not already set.
-            if (strtolower($key) === 'user-agent') {
-                $userAgentFlag = false;
-            }
-        }
-        $userAgentFlag && $request = $request->withHeader('User-Agent', \GuzzleHttp\default_user_agent());
-        if (isset($this->options['json'])) {
-            $contentType = 'application/json';
-            $body        = \GuzzleHttp\json_encode($this->options['json']);
-        } elseif (isset($this->options['form_params'])) {
-            $contentType = 'application/x-www-form-urlencoded';
-            $body        = http_build_query($this->options['form_params'], '', '&');
-        } else {
-            $body = $request->getBody();
-            if ($body instanceof MultipartStream) {
-                $contentType = 'multipart/form-data; boundary=' . $body->getBoundary();
-            }
-        }
-
-        isset($contentType) && $request = $request->withHeader('Content-Type', $contentType);
-        isset($contentType) && $request = $request->withHeader('Content-Length', strlen($body));
-        $request->hasHeader('Connection') or $request = $request->withHeader('Connection', 'close');
-
-        return self::getRawHttp($line, $request, $body);
+        return $this->rawRequest;
     }
 
     public function getRawResponse(ResponseInterface $response): string
     {
-        $code    = $response->getStatusCode();
-        $phrase  = $response->getReasonPhrase();
-        $version = $response->getProtocolVersion();
-        $line    = sprintf('HTTP/%s %d %s', $version, $code, $phrase);
-        $body    = (string)$response->getBody();
-
-        return self::getRawHttp($line, $response, $body);
-    }
-
-    private static function getRawHttp(string $line, MessageInterface $message, string $body = ''): string
-    {
-        $header      = '';
-        $headerNames = array_keys($message->getHeaders());
-        if (($key = array_search('Host', $headerNames)) !== false) {
-            unset($headerNames[$key]);
-            array_unshift($headerNames, 'Host');
-        }
-        foreach ($headerNames as $value) {
-            $header .= $value . ': ' . $message->getHeaderLine($value) . "\r\n";
-        }
-
-        $rawHttp = '';
-        $rawHttp .= $line;
-        $rawHttp .= "\r\n";
-        $rawHttp .= $header;
-        $rawHttp .= "\r\n";
-        $rawHttp .= $body;
-
-        return $rawHttp;
+        return $this->rawResponse;
     }
 }
