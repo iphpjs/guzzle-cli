@@ -11,6 +11,7 @@ namespace GuzzleCli;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\TransferStats;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -26,7 +27,7 @@ use function GuzzleHttp\Psr7\str;
  * @author suse 17246503142@163.com
  * @package App\Util
  */
-class Guzzle
+class Guzzle extends Client
 {
     const CONFIG = [
         'verify'      => false,
@@ -40,9 +41,9 @@ class Guzzle
 
     private static $instance;
 
-    private function __construct($config)
+    public function __construct($config)
     {
-        return new Client($config + self::CONFIG);
+        return parent::__construct($config + self::CONFIG);
     }
 
     private function clone()
@@ -58,10 +59,10 @@ class Guzzle
 
     public function send(RequestInterface $request, array $options = [])
     {
-        return $this->send($request, $options + [
-                'on_stats' => function (RequestInterface $request, RequestInterface $response, UriInterface $uri) {
-                    $this->rawRequest  = str($request);
-                    $this->rawResponse = str($response);
+        return parent::send($request, $options + [
+                'on_stats' => function (TransferStats $stats) {
+                    $this->rawRequest  = str($stats->getRequest());
+                    $this->rawResponse = str($stats->getResponse());
                 },
             ]);
     }
@@ -71,7 +72,7 @@ class Guzzle
         return $this->rawRequest;
     }
 
-    public function getRawResponse(ResponseInterface $response): string
+    public function getRawResponse(): string
     {
         return $this->rawResponse;
     }

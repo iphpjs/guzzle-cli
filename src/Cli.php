@@ -37,7 +37,7 @@ class Cli
      */
     public function send(InputInterface $input)
     {
-
+        $config = [];
         if ($input->hasParameterOption('--proxy')) {
             $config['proxy'] = $input->getParameterOption('--proxy');
         }
@@ -49,6 +49,6 @@ class Cli
             echo $guzzle->getRawRequest();
             echo PHP_EOL;
         }
-        echo $guzzle->getRawRequest();
+        echo $guzzle->getRawResponse();
     }
 }
